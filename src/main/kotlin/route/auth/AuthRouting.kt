@@ -1,18 +1,18 @@
 package route.auth
 
-import extensions.postParams
 import extensions.respondError
 import extensions.respondObject
 import org.jetbrains.ktor.application.ApplicationCall
 import org.jetbrains.ktor.application.call
-import org.jetbrains.ktor.http.ContentType
-import org.jetbrains.ktor.response.respondText
 import org.jetbrains.ktor.routing.Route
 import org.jetbrains.ktor.routing.post
 import tools.ParamValidator
 import tools.error.AlreadyExists
+import tools.error.BadRequestError
 import tools.error.InvalidParamError
 import tools.error.NotFoundError
+import tools.formater.TokenFormater
+import tools.formater.UserFormater
 import worker.TokenWorker
 import worker.UserWorker
 
@@ -40,13 +40,11 @@ object AuthRouting {
                 if (user != null) {
 
                     // User exists
-
                     val token = TokenWorker.createToken(
                             userId = user.id,
                             scope = loginParams.scope
                     )
-
-                    call.respondObject(token)
+                    call.respondObject(TokenFormater.format(token))
 
                 } else {
                     call.respondError(NotFoundError())
@@ -75,13 +73,23 @@ object AuthRouting {
                             lastName = signUpParams.lastName
                     )
 
-                    call.respondObject(user)
+                    if (user != null) {
+
+                        // User created
+                        call.respondObject(UserFormater.format(user))
+
+                    } else {
+
+                        // Couldn't create user
+                        call.respondError(BadRequestError())
+
+                    }
 
                 } else {
 
                     // UserName already exists
-
                     call.respondError(AlreadyExists(signUpParams.userName))
+
                 }
 
             } else {
@@ -93,9 +101,9 @@ object AuthRouting {
     }
 
     suspend private fun ApplicationCall.validateLogin(): ParamValidator<AuthPostLoginParams>
-            = AuthPostLoginParams.validate(postParams())
+            = AuthPostLoginParams.validate(this)
 
     suspend private fun ApplicationCall.validateSignUp(): ParamValidator<AuthPostSignUpParams>
-            = AuthPostSignUpParams.validate(postParams())
+            = AuthPostSignUpParams.validate(this)
 
 }

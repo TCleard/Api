@@ -14,7 +14,7 @@ class MockLocaleUserModule : LocaleUserModule {
     override fun isUserNameAlreadyUsed(userName: String): Boolean
             = MockDB.users.any { it.userName == userName }
 
-    override fun addUser(user: UserModel): UserModel {
+    override fun addUser(user: UserModel): UserModel? {
 
         // AutoIncrement des enfers
         user.id = MockDB.users.map { it.id }.max()?.plus(1) ?: 1
@@ -22,6 +22,26 @@ class MockLocaleUserModule : LocaleUserModule {
         MockDB.users.add(user)
 
         return user
+
+    }
+
+    override fun editUser(userId: Int, userFirstName: String?, userLastName: String?): UserModel? {
+
+        return MockDB.users
+                .firstOrNull { it.id == userId }
+                ?.let { user ->
+
+                    userFirstName?.let {
+                        user.firstName = it
+                    }
+
+                    userLastName?.let {
+                        user.lastName = it
+                    }
+
+                    user
+
+                }
 
     }
 

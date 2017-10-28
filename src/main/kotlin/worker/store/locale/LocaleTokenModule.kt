@@ -8,6 +8,4 @@ interface LocaleTokenModule {
 
     fun getToken(access: String): TokenModel?
 
-    fun getTokens(userId: Int): List<TokenModel>
-
 }

@@ -2,6 +2,7 @@ package tools
 
 import worker.store.locale.LocaleStore
 import worker.store.locale.mock.MockLocaleStore
+import worker.store.locale.sql.SQLLocaleStore
 
 object Injector {
 
@@ -9,7 +10,7 @@ object Injector {
 
     fun configure() {
 
-        localeStore = MockLocaleStore()
+        localeStore = SQLLocaleStore()
 
     }
 

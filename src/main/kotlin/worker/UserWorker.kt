@@ -14,7 +14,7 @@ object UserWorker {
     fun login(userName: String, password: String): UserModel?
             = localeUserModule.getUser(userName = userName, password = password.hashPassword())
 
-    fun createUser(userName: String, password: String, firstName: String, lastName: String): UserModel
+    fun createUser(userName: String, password: String, firstName: String, lastName: String): UserModel?
             = localeUserModule.addUser(
             UserModel(
                     userName = userName,
@@ -28,6 +28,13 @@ object UserWorker {
 
     fun getUser(userId: Int): UserModel?
             = localeUserModule.getUser(userId)
+
+    fun editUser(userId: Int, userFirstName: String?, userLastName: String?): UserModel?
+            = localeUserModule.editUser(
+            userId = userId,
+            userFirstName = userFirstName,
+            userLastName = userLastName
+    )
 
 
 }

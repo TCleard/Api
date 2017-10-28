@@ -1,7 +1,9 @@
 package route.auth
 
-import org.jetbrains.ktor.util.ValuesMap
+import extensions.getParams
+import org.jetbrains.ktor.application.ApplicationCall
 import tools.ParamValidator
+import tools.formater.UserFormater
 
 data class UserGetMeParams(
         val userId: Int
@@ -9,11 +11,11 @@ data class UserGetMeParams(
 
     companion object {
 
-        private const val USER_ID = "id"
+        private val USER_ID = UserFormater.ID
 
-        fun validate(map: ValuesMap): ParamValidator<UserGetMeParams> {
+        suspend fun validate(call: ApplicationCall): ParamValidator<UserGetMeParams> {
 
-            val userId = map[USER_ID]
+            val userId = call.getParams()[USER_ID]
 
             val meValidator = ParamValidator<UserGetMeParams>()
 

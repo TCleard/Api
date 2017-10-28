@@ -1,10 +1,8 @@
 package tools
 
-import extensions.headers
 import extensions.respondError
 import model.TokenModel
 import org.jetbrains.ktor.application.ApplicationCall
-import org.jetbrains.ktor.http.HttpStatusCode
 import org.jetbrains.ktor.util.ValuesMap
 import tools.error.InvalidTokenError
 import tools.error.MissingTokenError
@@ -46,9 +44,11 @@ object TokenRetriever {
 
     suspend fun retrieveToken(call: ApplicationCall): TokenModel? {
 
-        if (TokenRetriever.hasToken(call.headers())) {
+        val headers = call.request.headers
 
-            val token = TokenRetriever.getToken(call.headers())
+        if (TokenRetriever.hasToken(headers)) {
+
+            val token = TokenRetriever.getToken(headers)
 
             if (token != null
                     && token.isValid

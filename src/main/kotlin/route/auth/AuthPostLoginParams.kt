@@ -1,8 +1,13 @@
 package route.auth
 
+import extensions.formParams
 import model.ScopeModel
+import org.jetbrains.ktor.application.ApplicationCall
+import org.jetbrains.ktor.application.ApplicationRequest
 import org.jetbrains.ktor.util.ValuesMap
 import tools.ParamValidator
+import tools.formater.TokenFormater
+import tools.formater.UserFormater
 
 data class AuthPostLoginParams(
         val userName: String,
@@ -12,16 +17,18 @@ data class AuthPostLoginParams(
 
     companion object {
 
-        private const val USER_NAME = "username"
-        private const val PASSWORD = "password"
-        private const val SCOPE = "scope"
+        private val USER_NAME = UserFormater.USER_NAME
+        private val PASSWORD = UserFormater.PASSWORD
+        private val SCOPE = TokenFormater.SCOPE
 
 
-        fun validate(map: ValuesMap): ParamValidator<AuthPostLoginParams> {
+        suspend fun validate(call: ApplicationCall): ParamValidator<AuthPostLoginParams> {
 
-            val userName = map[USER_NAME]
-            val password = map[PASSWORD]
-            val scopeValue = map[SCOPE]
+            val form = call.formParams()
+
+            val userName = form[USER_NAME]
+            val password = form[PASSWORD]
+            val scopeValue = form[SCOPE]
 
             val scope = ScopeModel.fromValue(scopeValue)
 

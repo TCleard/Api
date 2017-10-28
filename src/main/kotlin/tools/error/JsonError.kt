@@ -5,7 +5,6 @@ import org.jetbrains.ktor.http.HttpStatusCode
 
 abstract class JsonError {
 
-    private val CODE = "code"
     private val ERROR = "error"
     private val MESSAGE = "message"
 
@@ -17,7 +16,6 @@ abstract class JsonError {
 
         val json = JsonObject()
 
-        json.addProperty(CODE, statusCode.value)
         json.addProperty(ERROR, error)
         json.addProperty(MESSAGE, message)
 

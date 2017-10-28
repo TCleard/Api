@@ -20,8 +20,4 @@ class MockLocaleTokenModule : LocaleTokenModule {
     override fun getToken(access: String): TokenModel?
             = MockDB.tokens.firstOrNull { it.access == access }
 
-    override fun getTokens(userId: Int): List<TokenModel>
-            = MockDB.tokens.filter { it.userId == userId }
-
-
 }

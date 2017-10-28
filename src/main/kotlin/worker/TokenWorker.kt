@@ -17,7 +17,7 @@ object TokenWorker {
         val token = TokenModel(
                 access = UUID.randomUUID().toString(),
                 refresh = UUID.randomUUID().toString(),
-                createdAt = System.currentTimeMillis(),
+                createdAt = System.currentTimeMillis() ,
                 scope = scope,
                 userId = userId,
                 isValid = true
